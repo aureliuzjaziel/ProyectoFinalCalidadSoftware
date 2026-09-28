@@ -1,0 +1,25 @@
+{% extends "base.html" %} {% block title %}Confirmar eliminación{% endblock %}
+{% block content %}
+<main class="container py-4" style="max-width: 720px">
+  <h1 class="mb-3">Confirmar eliminación</h1>
+
+  {% if linked_pokemons %}
+  <p class="alert alert-warning">
+    No se pueden eliminar estos sprites porque están asignados a Pokémon:
+  </p>
+  <ul>
+    {% for pokemon in linked_pokemons %}
+    <li>{{ pokemon.name|title }}</li>
+    {% endfor %}
+  </ul>
+  <a class="btn btn-secondary" href="{% url cancel_url %}">Volver</a>
+  {% else %}
+  <p>¿Seguro que quieres eliminar <strong>{{ object_name }}</strong>?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button class="btn btn-danger" type="submit">Sí, eliminar</button>
+    <a class="btn btn-secondary" href="{% url cancel_url %}">Cancelar</a>
+  </form>
+  {% endif %}
+</main>
+{% endblock %}

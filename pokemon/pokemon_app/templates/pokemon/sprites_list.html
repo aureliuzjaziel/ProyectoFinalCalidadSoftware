@@ -1,0 +1,88 @@
+{% extends "base.html" %} {% block title %}Administrar sprites{% endblock %} {%
+block content %}
+<main class="container py-4">
+  <div
+    class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4"
+  >
+    <h1 class="mb-0">Sprites</h1>
+    <div class="d-flex gap-2">
+      <a class="btn btn-success" href="{% url 'pokemon_sprites_create' %}"
+        >Agregar sprites</a
+      >
+      <a class="btn btn-secondary" href="{% url 'pokemon_list' %}"
+        >Volver a Pokémon</a
+      >
+    </div>
+  </div>
+
+  {% if sprites_list %}
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Frontal</th>
+          <th>Trasera</th>
+          <th>Frontal variocolor</th>
+          <th>Trasera variocolor</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for sprites in sprites_list %}
+        <tr>
+          <td>{{ sprites.id }}</td>
+          <td>
+            {% if sprites.front_default %}<img
+              src="{{ sprites.front_default }}"
+              alt="Sprite frontal"
+              width="64"
+              height="64"
+            />{% else %}Sin imagen{% endif %}
+          </td>
+          <td>
+            {% if sprites.back_default %}<img
+              src="{{ sprites.back_default }}"
+              alt="Sprite trasero"
+              width="64"
+              height="64"
+            />{% else %}Sin imagen{% endif %}
+          </td>
+          <td>
+            {% if sprites.front_shiny %}<img
+              src="{{ sprites.front_shiny }}"
+              alt="Sprite frontal variocolor"
+              width="64"
+              height="64"
+            />{% else %}Sin imagen{% endif %}
+          </td>
+          <td>
+            {% if sprites.back_shiny %}<img
+              src="{{ sprites.back_shiny }}"
+              alt="Sprite trasero variocolor"
+              width="64"
+              height="64"
+            />{% else %}Sin imagen{% endif %}
+          </td>
+          <td class="text-nowrap">
+            <a
+              class="btn btn-sm btn-warning"
+              href="{% url 'pokemon_sprites_edit' sprites.id %}"
+              >Editar</a
+            >
+            <a
+              class="btn btn-sm btn-danger"
+              href="{% url 'pokemon_sprites_delete' sprites.id %}"
+              >Eliminar</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p>No hay sprites registrados.</p>
+  {% endif %}
+</main>
+{% endblock %}

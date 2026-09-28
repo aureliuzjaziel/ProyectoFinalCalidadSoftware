@@ -1,0 +1,231 @@
+{% extends "base.html" %} {% block content %}
+<style>
+  .pokemon-detail {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .pokemon-art {
+    min-height: 340px;
+    background: #f3f6f8;
+    border-radius: 12px;
+  }
+
+  .pokemon-art img {
+    height: 300px;
+    object-fit: contain;
+  }
+
+  .pokemon-art .carousel-control-prev,
+  .pokemon-art .carousel-control-next {
+    top: 50%;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: rgba(25, 35, 45, 0.85);
+    opacity: 1;
+    transform: translateY(-50%);
+  }
+
+  .pokemon-art .carousel-control-prev {
+    left: 12px;
+  }
+
+  .pokemon-art .carousel-control-next {
+    right: 12px;
+  }
+
+  .pokemon-type {
+    display: inline-block;
+    min-width: 88px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-align: center;
+    text-transform: capitalize;
+  }
+
+  .type-normal {
+    background: #8b8b78;
+  }
+  .type-fire {
+    background: #e76f32;
+  }
+  .type-water {
+    background: #4388d4;
+  }
+  .type-electric {
+    background: #c99b00;
+  }
+  .type-grass {
+    background: #55a64e;
+  }
+  .type-ice {
+    background: #48aeb4;
+  }
+  .type-fighting {
+    background: #bd3c42;
+  }
+  .type-poison {
+    background: #9652a0;
+  }
+  .type-ground {
+    background: #a8793c;
+  }
+  .type-flying {
+    background: #7184d5;
+  }
+  .type-psychic {
+    background: #dd5482;
+  }
+  .type-bug {
+    background: #829b28;
+  }
+  .type-rock {
+    background: #96813c;
+  }
+  .type-ghost {
+    background: #665a98;
+  }
+  .type-dragon {
+    background: #5d54c5;
+  }
+  .type-dark {
+    background: #514845;
+  }
+  .type-steel {
+    background: #728394;
+  }
+  .type-fairy {
+    background: #d278a4;
+  }
+</style>
+
+<main class="container py-4 pokemon-detail">
+  <header class="text-center mb-4">
+    <p class="text-secondary mb-1">Pokédex #{{ pokemon.id }}</p>
+    <h1 class="text-capitalize display-5 fw-bold mb-3">{{ pokemon.name }}</h1>
+    <p class="text-secondary mb-2">Tipos del Pokémon</p>
+    <div class="d-flex justify-content-center flex-wrap gap-2">
+      {% if pokemon.type_1 %}
+      <span class="pokemon-type type-{{ pokemon.type_1 }}"
+        >{{ pokemon.type_1 }}</span
+      >
+      {% endif %} {% if pokemon.type_2 %}
+      <span class="pokemon-type type-{{ pokemon.type_2 }}"
+        >{{ pokemon.type_2 }}</span
+      >
+      {% endif %}
+    </div>
+  </header>
+
+  <div class="row g-4 align-items-stretch">
+    <section class="col-12 col-md-6" aria-label="Imágenes del Pokémon">
+      <div
+        id="pokemonSprites"
+        class="carousel slide pokemon-art d-flex align-items-center"
+      >
+        <div class="carousel-inner w-100">
+          {% if pokemon.sprites.front_default %}
+          <div class="carousel-item active text-center">
+            <img
+              src="{{ pokemon.sprites.front_default }}"
+              class="d-block mx-auto img-fluid"
+              alt="{{ pokemon.name }} de frente"
+            />
+            <p class="text-secondary mb-3">Vista frontal</p>
+          </div>
+          {% endif %} {% if pokemon.sprites.back_default %}
+          <div
+            class="carousel-item{% if not pokemon.sprites.front_default %} active{% endif %} text-center"
+          >
+            <img
+              src="{{ pokemon.sprites.back_default }}"
+              class="d-block mx-auto img-fluid"
+              alt="{{ pokemon.name }} de espaldas"
+            />
+            <p class="text-secondary mb-3">Vista trasera</p>
+          </div>
+          {% endif %} {% if pokemon.sprites.front_shiny %}
+          <div
+            class="carousel-item{% if not pokemon.sprites.front_default and not pokemon.sprites.back_default %} active{% endif %} text-center"
+          >
+            <img
+              src="{{ pokemon.sprites.front_shiny }}"
+              class="d-block mx-auto img-fluid"
+              alt="{{ pokemon.name }} frontal variocolor"
+            />
+            <p class="text-secondary mb-3">Frontal variocolor</p>
+          </div>
+          {% endif %} {% if pokemon.sprites.back_shiny %}
+          <div
+            class="carousel-item{% if not pokemon.sprites.front_default and not pokemon.sprites.back_default and not pokemon.sprites.front_shiny %} active{% endif %} text-center"
+          >
+            <img
+              src="{{ pokemon.sprites.back_shiny }}"
+              class="d-block mx-auto img-fluid"
+              alt="{{ pokemon.name }} trasero variocolor"
+            />
+            <p class="text-secondary mb-3">Trasera variocolor</p>
+          </div>
+          {% endif %}
+        </div>
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#pokemonSprites"
+          data-bs-slide="prev"
+          aria-label="Imagen anterior"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#pokemonSprites"
+          data-bs-slide="next"
+          aria-label="Imagen siguiente"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </button>
+      </div>
+    </section>
+
+    <section class="col-12 col-md-6" aria-label="Datos del Pokémon">
+      <div class="h-100 p-4 border rounded-3">
+        <h2 class="h4 mb-4">Datos principales</h2>
+        <div class="row g-3">
+          <div class="col-6">
+            <p class="text-secondary mb-1">Altura</p>
+            <p class="fs-5 fw-semibold">{{ pokemon.height }} dm</p>
+          </div>
+          <div class="col-6">
+            <p class="text-secondary mb-1">Peso</p>
+            <p class="fs-5 fw-semibold">{{ pokemon.weight }} hg</p>
+          </div>
+          <div class="col-12">
+            <hr />
+            <p class="text-secondary mb-1">Experiencia base</p>
+            <p class="display-6 fw-bold mb-0">
+              {{ pokemon.base_experience }}
+              <span class="fs-6 fw-normal">XP</span>
+            </p>
+          </div>
+          <div class="col-12">
+            <p class="text-secondary mb-1">Orden en la Pokédex</p>
+            <p class="fs-5 fw-semibold mb-0">#{{ pokemon.order }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="text-center my-4">
+    <a class="btn btn-primary" href="{% url 'pokemon_list' %}"
+      >Volver a la lista</a
+    >
+  </div>
+</main>
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends "base.html" %}{% block content %}
+<div class="container-fluid text-center">
+  <div
+    class="d-flex flex-wrap justify-content-center align-items-center gap-2 my-4"
+  >
+    <h1 class="mb-0">Lista de Pokémon</h1>
+    <a class="btn btn-success" href="{% url 'pokemon_create' %}"
+      >Agregar Pokémon</a
+    >
+  </div>
+
+  <form method="get" class="d-flex justify-content-center gap-2 mb-4">
+    <input
+      class="form-control"
+      style="max-width: 320px"
+      type="search"
+      name="q"
+      value="{{ search_term }}"
+      placeholder="Buscar Pokémon por nombre"
+      aria-label="Buscar Pokémon por nombre"
+    />
+    <button class="btn btn-primary" type="submit">Buscar</button>
+    {% if search_term %}
+    <a class="btn btn-outline-secondary" href="{% url 'pokemon_list' %}"
+      >Limpiar</a
+    >
+    {% endif %}
+  </form>
+
+  {% if pokemons %}
+  <div class="d-flex flex-wrap justify-content-center gap-4">
+    {% for pokemon in pokemons %}
+    <div class="card" style="width: 18rem">
+      {% if pokemon.sprites.front_default %}
+      <img
+        src="{{ pokemon.sprites.front_default }}"
+        class="card-img-top img-fluid p-3"
+        alt="{{ pokemon.name }}"
+        style="height: 200px; object-fit: contain"
+      />
+      {% endif %}
+      <div class="card-body">
+        <h2 class="card-title h5">{{ pokemon.name|title }}</h2>
+        <div class="d-flex justify-content-center flex-wrap gap-2">
+          <a
+            class="btn btn-primary"
+            href="{% url 'pokemon_details' pokemon.id %}"
+            >Detalles</a
+          >
+          <a class="btn btn-warning" href="{% url 'pokemon_edit' pokemon.id %}"
+            >Editar</a
+          >
+          <a class="btn btn-danger" href="{% url 'pokemon_delete' pokemon.id %}"
+            >Eliminar</a
+          >
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if page_obj.paginator.num_pages > 1 %}
+  <nav aria-label="Paginación de Pokémon" class="my-4">
+    <ul class="pagination justify-content-center flex-wrap">
+      {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a
+          class="page-link"
+          href="?page={{ page_obj.previous_page_number }}&q={{ search_term|urlencode }}"
+          >Anterior</a
+        >
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <span class="page-link">Anterior</span>
+      </li>
+      {% endif %} {% for page_number in page_range %}
+      <li
+        class="page-item{% if page_number == page_obj.number %} active{% endif %}"
+      >
+        {% if page_number == page_obj.number %}
+        <a
+          class="page-link"
+          href="?page={{ page_number }}&q={{ search_term|urlencode }}"
+          aria-current="page"
+          >{{ page_number }}</a
+        >
+        {% else %}
+        <a
+          class="page-link"
+          href="?page={{ page_number }}&q={{ search_term|urlencode }}"
+          >{{ page_number }}</a
+        >
+        {% endif %}
+      </li>
+      {% endfor %} {% if page_obj.has_next %}
+      <li class="page-item">
+        <a
+          class="page-link"
+          href="?page={{ page_obj.next_page_number }}&q={{ search_term|urlencode }}"
+          >Siguiente</a
+        >
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <span class="page-link">Siguiente</span>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %} {% else %} {% if search_term %}
+  <p>No se encontraron Pokémon que coincidan con “{{ search_term }}”.</p>
+  {% else %}
+  <p>No hay Pokémon cargados todavía.</p>
+  {% endif %} {% endif %}
+</div>
+{% endblock %}
